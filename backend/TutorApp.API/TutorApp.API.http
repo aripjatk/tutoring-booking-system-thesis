@@ -1,0 +1,6 @@
+@TutorApp.API_HostAddress = http://ari-pjatk-thesis.norwayeast.cloudapp.azure.com:5000
+
+GET {{TutorApp.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
