@@ -1,0 +1,43 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">New student</h2>
+    <div class="text-secondary">Creates student account</div>
+  </div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-outline-secondary" ng-click="vm.cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="vm.save()" ng-disabled="vm.state.saving">
+      <span class="spinner-border spinner-border-sm me-2" ng-if="vm.state.saving"></span>
+      Create
+    </button>
+  </div>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <label class="form-label">Username</label>
+        <input class="form-control" ng-model="vm.form.username" placeholder="e.g. student01" />
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label">Display name</label>
+        <input class="form-control" ng-model="vm.form.displayName" placeholder="e.g. Anna Nowak" />
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label">Email</label>
+        <input class="form-control" type="email" ng-model="vm.form.email" placeholder="name@example.com" />
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label">Password</label>
+        <input class="form-control" type="password" ng-model="vm.form.password" placeholder="password" />
+      </div>
+      <div class="col-12 text-secondary small">
+        Tip: Make sure you enter a valid email address. The student will have to click a link sent to that address to activate the account.
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div class="auth-shell">
+  <div class="text-center mb-4">
+    <div class="display-6 fw-semibold">Tutoring Booking System</div>
+    <div class="text-secondary" ng-if="!vm.isRegistering">Sign in to access your account</div>
+    <div class="text-secondary" ng-if="vm.isRegistering">Register as a new Tutor</div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body p-4">
+      <!-- Login Form -->
+      <form ng-submit="vm.login()" novalidate ng-if="!vm.isRegistering">
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input class="form-control" ng-model="vm.form.username" autocomplete="username" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input class="form-control" type="password" ng-model="vm.form.password" autocomplete="current-password" required />
+        </div>
+
+        <div class="alert alert-danger py-2" ng-if="vm.state.error">
+          <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+        </div>
+
+        <button class="btn btn-primary w-100 mb-3" type="submit" ng-disabled="vm.state.busy">
+          <span class="spinner-border spinner-border-sm me-2" ng-if="vm.state.busy"></span>
+          Log in
+        </button>
+
+        <div class="text-center">
+            <a href="" ng-click="vm.toggleRegister()">Register as tutor</a>
+        </div>
+      </form>
+
+      <!-- Registration Form -->
+      <form ng-submit="vm.register()" novalidate ng-if="vm.isRegistering">
+        <div class="mb-3">
+          <label class="form-label" for="reg-username">Username</label>
+          <input id="reg-username" class="form-control" ng-model="vm.registerForm.username" required minlength="1" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="reg-displayName">Display Name</label>
+            <input id="reg-displayName" class="form-control" ng-model="vm.registerForm.displayName" required minlength="1" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="reg-email">Email Address</label>
+            <input id="reg-email" class="form-control" type="email" ng-model="vm.registerForm.email" required minlength="1" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="reg-password">Password</label>
+          <input id="reg-password" class="form-control" type="password" ng-model="vm.registerForm.password" required minlength="6" />
+        </div>
+
+        <div class="alert alert-danger py-2" ng-if="vm.state.error">
+          <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+        </div>
+
+        <button class="btn btn-primary w-100 mb-3" type="submit" ng-disabled="vm.state.busy">
+          <span class="spinner-border spinner-border-sm me-2" ng-if="vm.state.busy"></span>
+          Register
+        </button>
+
+        <div class="text-center">
+            <a href="" ng-click="vm.toggleRegister()">Back to login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

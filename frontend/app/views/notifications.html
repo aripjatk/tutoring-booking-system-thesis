@@ -1,0 +1,51 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h4">Notifications</h2>
+    <button class="btn btn-sm btn-outline-secondary" ng-click="vm.load()">
+      <i class="bi bi-arrow-clockwise"></i> Refresh
+    </button>
+  </div>
+
+  <div ng-if="vm.state.busy && vm.notifications.length === 0" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div ng-if="vm.state.error" class="alert alert-danger">
+    {{vm.state.error}}
+  </div>
+
+  <div ng-if="!vm.state.busy && vm.notifications.length === 0" class="text-center py-5 text-muted">
+    <i class="bi bi-bell-slash display-4 mb-3 d-block"></i>
+    <p>No new notifications.</p>
+  </div>
+
+  <div class="list-group" ng-if="vm.notifications.length > 0">
+    <div class="list-group-item list-group-item-action d-flex gap-3 py-3" ng-repeat="n in vm.notifications">
+      <div class="d-flex flex-column justify-content-center align-items-center" style="width: 40px;">
+         <i class="bi fs-4"
+            ng-class="{
+              'bi-check-circle text-success': n.notificationType === 0,
+              'bi-x-circle text-danger': n.notificationType === 1,
+              'bi-file-earmark-check text-info': n.notificationType === 2,
+              'bi-envelope text-primary': n.notificationType === 3,
+              'bi-pencil-square text-warning': n.notificationType === 4,
+              'bi-calendar-plus text-primary': n.notificationType === 5
+            }"></i>
+      </div>
+      <div class="flex-grow-1">
+        <div class="d-flex gap-2 w-100 justify-content-between">
+          <h6 class="mb-0">{{vm.getTypeLabel(n.notificationType)}}</h6>
+          <small class="text-nowrap text-muted">{{n.notificationTime | date:'medium'}}</small>
+        </div>
+        <p class="mb-0 opacity-75">{{n.message}}</p>
+      </div>
+      <div class="align-self-center">
+        <button class="btn btn-outline-danger btn-sm" ng-click="vm.delete(n.notificationID)" title="Delete">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

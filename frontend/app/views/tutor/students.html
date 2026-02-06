@@ -1,0 +1,65 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">Students</h2>
+    <div class="text-secondary">Create and manage student accounts</div>
+  </div>
+  <button class="btn btn-primary" ng-click="vm.create()">
+    <i class="bi bi-person-plus me-1"></i>New student
+  </button>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="row g-2 align-items-center mb-2">
+      <div class="col-12 col-md-4">
+        <input class="form-control" ng-model="vm.search" placeholder="Search…" />
+      </div>
+    </div>
+
+    <div ng-if="vm.state.busy" class="d-flex align-items-center gap-2">
+      <div class="spinner-border" role="status"></div>
+      <div class="text-secondary">Loading…</div>
+    </div>
+
+    <div class="table-responsive" ng-if="!vm.state.busy">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Display name</th>
+            <th>Email</th>
+            <th>Active</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="s in vm.students | filter:vm.search track by s.username">
+            <td class="fw-semibold">{{s.username}}</td>
+            <td>{{s.displayName}}</td>
+            <td class="text-secondary">{{s.email}}</td>
+            <td>
+              <span class="badge" ng-class="{'text-bg-success': s.isActive, 'text-bg-secondary': !s.isActive}">
+                {{s.isActive ? 'Active' : 'Inactive'}}
+              </span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary me-1" ng-click="vm.message(s)" title="Message">
+                <i class="bi bi-envelope"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" ng-click="vm.deactivate(s)" ng-disabled="!s.isActive">
+                <i class="bi bi-slash-circle"></i>
+              </button>
+            </td>
+          </tr>
+          <tr ng-if="!vm.students.length">
+            <td colspan="5" class="text-secondary">No students.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

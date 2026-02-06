@@ -1,0 +1,50 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">My Homework</h2>
+    <div class="text-secondary">Assignments to complete</div>
+  </div>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div ng-if="vm.state.busy" class="d-flex align-items-center gap-2">
+      <div class="spinner-border" role="status"></div>
+      <div class="text-secondary">Loading…</div>
+    </div>
+
+    <div class="table-responsive" ng-if="!vm.state.busy">
+      <table class="table align-middle table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Objective</th>
+            <th>Status</th>
+            <th>Feedback</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="a in vm.assignments track by a.homeworkAssignmentID" style="cursor: pointer;" ng-click="vm.goToDetail(a.homeworkAssignmentID)">
+            <td class="fw-semibold">{{a.name}}</td>
+            <td class="text-truncate" style="max-width: 200px;">{{a.objective}}</td>
+            <td>
+              <span class="badge" ng-class="{'text-bg-success': a.solutionFileName, 'text-bg-warning': !a.solutionFileName}">
+                {{a.solutionFileName ? 'Submitted' : 'Pending'}}
+              </span>
+            </td>
+            <td>
+                <i class="bi bi-check-circle-fill text-success" ng-if="a.solutionFeedback" title="Feedback available"></i>
+                <span class="text-secondary small" ng-if="!a.solutionFeedback">-</span>
+            </td>
+          </tr>
+          <tr ng-if="!vm.assignments.length">
+            <td colspan="5" class="text-secondary">No assignments found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

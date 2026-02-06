@@ -1,0 +1,176 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">Course #{{vm.courseId}}</h2>
+    <div class="text-secondary">Edit details and enroll students</div>
+  </div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-outline-secondary" ng-click="vm.back()">
+      <i class="bi bi-arrow-left me-1"></i>Back
+    </button>
+    <button class="btn btn-primary" ng-click="vm.save()" ng-disabled="vm.state.saving || !vm.course">
+      <span class="spinner-border spinner-border-sm me-2" ng-if="vm.state.saving"></span>
+      Save
+    </button>
+  </div>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div ng-if="vm.state.busy" class="d-flex align-items-center gap-2">
+  <div class="spinner-border" role="status"></div>
+  <div class="text-secondary">Loading…</div>
+</div>
+
+<div class="row g-3" ng-if="!vm.state.busy && vm.course">
+
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-header bg-transparent fw-semibold">
+        <i class="bi bi-pencil-square me-2"></i>Course details
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input class="form-control" ng-model="vm.course.name" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Price per session (PLN)</label>
+          <input class="form-control" type="number" min="0" step="0.01" ng-model="vm.course.pricePerSession" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" rows="3" ng-model="vm.course.description"></textarea>
+        </div>
+        <div class="text-secondary small">Tutor: <span class="font-monospace">{{vm.course.tutorUsername}}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-header bg-transparent fw-semibold">
+        <i class="bi bi-person-plus me-2"></i>Enroll a student
+      </div>
+      <div class="card-body">
+        <div class="row g-2">
+          <div class="col-12">
+            <label class="form-label">Student</label>
+            <select class="form-select" ng-model="vm.enrollForm.studentUsername" ng-options="s.username as (s.username + ' — ' + (s.displayName || '')) for s in vm.students">
+              <option value="">Select…</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Frequency</label>
+            <select class="form-select" ng-model="vm.enrollForm.frequency">
+              <option value="every week">weekly</option>
+              <option value="twice a week">twice a week</option>
+              <option value="three times a week">three times a week</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label">End date</label>
+            <input class="form-control" type="date" ng-model="vm.enrollForm.endDate" />
+          </div>
+          <div class="col-12">
+            <button class="btn btn-outline-primary" ng-click="vm.enroll()" ng-disabled="vm.state.enrolling || !vm.enrollForm.studentUsername">
+              <span class="spinner-border spinner-border-sm me-2" ng-if="vm.state.enrolling"></span>
+              Enroll
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header bg-transparent fw-semibold d-flex align-items-center justify-content-between">
+        <div><i class="bi bi-folder me-2"></i>Teaching Materials</div>
+      </div>
+      <div class="card-body">
+        <div class="row g-2 mb-3">
+          <div class="col-12 col-md-5">
+            <input class="form-control form-control-sm" placeholder="Material Name" ng-model="vm.newMaterial.name" />
+          </div>
+          <div class="col-12 col-md-5">
+            <input class="form-control form-control-sm" type="file" id="materialFile" />
+          </div>
+          <div class="col-12 col-md-2">
+            <button class="btn btn-sm btn-success w-100" ng-click="vm.uploadMaterial()" ng-disabled="vm.state.uploading">
+              <span class="spinner-border spinner-border-sm me-1" ng-if="vm.state.uploading"></span>Upload
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive" ng-if="vm.teachingMaterials.length">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>File</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="tm in vm.teachingMaterials">
+                  <td>{{tm.name}}</td>
+                  <td class="text-secondary small">{{tm.fileName}}</td>
+                  <td class="text-end">
+                    <button class="btn btn-sm btn-outline-danger" ng-click="vm.deleteMaterial(tm.teachingMaterialID)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+        <div class="text-secondary small" ng-if="!vm.teachingMaterials.length">No materials uploaded yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header bg-transparent fw-semibold d-flex align-items-center justify-content-between">
+        <div><i class="bi bi-people me-2"></i>Enrolled students</div>
+        <span class="badge text-bg-secondary">{{vm.enrollments.length}}</span>
+      </div>
+      <div class="card-body">
+        <div class="text-secondary small mb-2" ng-if="!vm.enrollments.length">No students enrolled yet.</div>
+
+        <div class="table-responsive" ng-if="vm.enrollments.length">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Frequency</th>
+                <th>End date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="e in vm.enrollments track by (e.studentUsername + '-' + e.courseID)">
+                <td class="fw-semibold">{{e.studentUsername}}</td>
+                <td>
+                  <input class="form-control form-control-sm" ng-model="e.frequency" />
+                </td>
+                <td>
+                  <input class="form-control form-control-sm" type="date" ng-model="e.endDate" />
+                </td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-primary" ng-click="vm.updateEnrollment(e)">
+                    Save
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

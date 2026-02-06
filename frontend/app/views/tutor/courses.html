@@ -1,0 +1,86 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">Courses</h2>
+    <div class="text-secondary">Create and manage your courses</div>
+  </div>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="row g-2 align-items-end">
+      <div class="col-12 col-md-4">
+        <label class="form-label">Course name</label>
+        <input class="form-control" ng-model="vm.newCourse.name" placeholder="e.g. English B2" />
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label">Price per session (PLN)</label>
+        <input class="form-control" type="number" min="0" step="0.01" ng-model="vm.newCourse.pricePerSession" />
+      </div>
+      <div class="col-12 col-md-5">
+        <label class="form-label">Description</label>
+        <input class="form-control" ng-model="vm.newCourse.description" placeholder="Short description" />
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" ng-click="vm.create()" ng-disabled="vm.state.saving || !vm.newCourse.name">
+          <span class="spinner-border spinner-border-sm me-2" ng-if="vm.state.saving"></span>
+          Create course
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="row g-2 align-items-center mb-2">
+      <div class="col-12 col-md-4">
+        <input class="form-control" ng-model="vm.search" placeholder="Search…" />
+      </div>
+      <div class="col-12 col-md-8 text-secondary small">
+        Tip: click a course to open details (enrollments, edit).
+      </div>
+    </div>
+
+    <div ng-if="vm.state.busy" class="d-flex align-items-center gap-2">
+      <div class="spinner-border" role="status"></div>
+      <div class="text-secondary">Loading…</div>
+    </div>
+
+    <div class="table-responsive" ng-if="!vm.state.busy">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th class="text-end">Price</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="c in vm.courses | filter:vm.search track by c.courseID">
+            <td>
+              <a href="" ng-click="vm.openDetail(c.courseID)" class="fw-semibold text-decoration-none">
+                {{c.name}}
+              </a>
+              <div class="text-secondary small">Tutor: {{c.tutorUsername}}</div>
+            </td>
+            <td class="text-end">{{c.pricePerSession | number:2}} PLN</td>
+            <td class="text-secondary small">{{c.description}}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger" ng-click="vm.delete(c)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+          <tr ng-if="!vm.courses.length">
+            <td colspan="4" class="text-secondary">No courses.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

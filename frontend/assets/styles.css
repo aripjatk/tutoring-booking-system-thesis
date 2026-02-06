@@ -1,0 +1,42 @@
+:root {
+  --tbs-bg: #ffffff;
+  --tbs-text: #0f172a;
+  --tbs-card: #ffffff;
+  --tbs-muted: #64748b;
+  --tbs-border: #e2e8f0;
+  --tbs-link: #0b5ed7;
+}
+body.theme-dark {
+  --tbs-bg: #0b1220;
+  --tbs-text: #e5e7eb;
+  --tbs-card: #0f172a;
+  --tbs-muted: #9ca3af;
+  --tbs-border: #1f2937;
+  --tbs-link: #93c5fd;
+
+  --bs-body-color: var(--tbs-text);
+  --bs-body-bg: var(--tbs-bg);
+  --bs-card-bg: var(--tbs-card);
+  --bs-card-color: var(--tbs-text);
+  --bs-card-border-color: var(--tbs-border);
+  --bs-table-color: var(--tbs-text);
+  --bs-table-border-color: var(--tbs-border);
+  --bs-heading-color: var(--tbs-text);
+  --bs-link-color: var(--tbs-link);
+  --bs-navbar-brand-color: var(--tbs-text);
+  --bs-navbar-brand-hover-color: var(--tbs-text);
+}
+body.theme-dark .navbar {
+  --bs-navbar-brand-color: var(--tbs-text);
+  --bs-navbar-brand-hover-color: var(--tbs-text);
+}
+body { background: var(--tbs-bg); color: var(--tbs-text); }
+.bg-body { background: var(--tbs-bg) !important; }
+.card { background: var(--tbs-card); border-color: var(--tbs-border); }
+.text-muted, .text-secondary { color: var(--tbs-muted) !important; }
+.border, .border-bottom { border-color: var(--tbs-border) !important; }
+a { color: var(--tbs-link); }
+.ng-cloak { display: none !important; }
+.auth-shell { max-width: 460px; margin: 6vh auto 0 auto; }
+.menu-link{ display:block; padding:.55rem .75rem; border-radius:.6rem; text-decoration:none; color: var(--tbs-text); }
+.menu-link:hover{ background: rgba(148,163,184,.15); }

@@ -1,0 +1,58 @@
+<div class="mb-3">
+  <button class="btn btn-outline-secondary btn-sm" ng-click="vm.back()">
+    <i class="bi bi-arrow-left me-1"></i>Back
+  </button>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div ng-if="vm.state.busy" class="d-flex align-items-center gap-2">
+  <div class="spinner-border" role="status"></div>
+  <div class="text-secondary">Loading message…</div>
+</div>
+
+<div class="card" ng-if="!vm.state.busy && vm.message.messageID">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="h5 mb-0">{{vm.message.topic}}</h3>
+    <span class="text-secondary small">{{vm.message.sentOn | date:'medium'}}</span>
+  </div>
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <strong class="text-secondary small d-block">From</strong>
+        <span>{{vm.message.senderUsername}}</span>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <strong class="text-secondary small d-block">To</strong>
+        <span>{{vm.message.recipientUsername}}</span>
+      </div>
+    </div>
+
+    <hr class="text-secondary opacity-25">
+
+    <div class="mb-4" style="white-space: pre-wrap;">{{vm.message.body}}</div>
+
+    <div ng-if="vm.message.attachmentFileName" class="card bg-light border-0">
+      <div class="card-body d-flex align-items-center justify-content-between p-2">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-file-earmark-text fs-4 text-primary"></i>
+          <div>
+            <div class="fw-semibold small">{{vm.message.attachmentFileName}}</div>
+            <div class="text-secondary small" style="font-size: 0.75rem;">Attachment</div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline-primary" ng-click="vm.downloadAttachment()">
+          <i class="bi bi-download me-1"></i>Download
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <div class="card-footer text-end bg-white border-top-0 pb-3">
+    <button class="btn btn-primary" ng-click="vm.reply()">
+      <i class="bi bi-reply me-1"></i>Reply
+    </button>
+  </div>
+</div>

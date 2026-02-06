@@ -1,0 +1,55 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">My courses</h2>
+    <div class="text-secondary">Courses assigned to your account</div>
+  </div>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="row g-2 align-items-center mb-2">
+      <div class="col-12 col-md-4">
+        <input class="form-control" ng-model="vm.search" placeholder="Search…" />
+      </div>
+    </div>
+
+    <div ng-if="vm.state.busy" class="d-flex align-items-center gap-2">
+      <div class="spinner-border" role="status"></div>
+      <div class="text-secondary">Loading…</div>
+    </div>
+
+    <div class="table-responsive" ng-if="!vm.state.busy">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Frequency</th>
+            <th>End date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="sc in vm.myCourses | filter:vm.search track by (sc.studentUsername + '-' + sc.courseID)">
+            <td>
+              <div class="fw-semibold">
+                <a ng-href="#!/student/courses/{{sc.courseID}}" class="text-decoration-none">
+                   {{(sc.course.name) || ('Course #' + sc.courseID)}}
+                </a>
+              </div>
+              <div class="text-secondary small">{{(sc.course && sc.course.description) || ''}}</div>
+            </td>
+            <td class="text-secondary">{{sc.frequency}}</td>
+            <td class="text-secondary">{{sc.endDate | date:'MMM d, y'}}</td>
+          </tr>
+          <tr ng-if="!vm.myCourses.length">
+            <td colspan="3" class="text-secondary">No courses assigned.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

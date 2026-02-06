@@ -1,0 +1,65 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">Student Dashboard</h2>
+    <div class="text-secondary">Your courses and upcoming sessions</div>
+  </div>
+  <button class="btn btn-outline-secondary btn-sm" ng-click="vm.refresh()" ng-disabled="vm.state.busy">
+    <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+  </button>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div ng-if="vm.state.busy" class="d-flex align-items-center gap-2">
+  <div class="spinner-border" role="status"></div>
+  <div class="text-secondary">Loading…</div>
+</div>
+
+<div class="row g-3" ng-if="!vm.state.busy">
+  <div class="col-12 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="fw-semibold mb-1"><i class="bi bi-journal-text me-2"></i>My courses</div>
+        <div class="display-6">{{vm.myCourses.length}}</div>
+        <a class="btn btn-sm btn-outline-primary mt-2" href="#!/student/courses">View courses</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="fw-semibold mb-1"><i class="bi bi-clock-history me-2"></i>My sessions</div>
+        <div class="display-6">{{vm.mySessions.length}}</div>
+        <a class="btn btn-sm btn-outline-primary mt-2" href="#!/student/sessions">View sessions</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="fw-semibold mb-2"><i class="bi bi-calendar-event me-2"></i>Upcoming (14 days)</div>
+        <div class="text-secondary small mb-2" ng-if="!vm.upcoming.length">No upcoming sessions.</div>
+
+        <div class="list-group list-group-flush">
+          <div class="list-group-item bg-transparent px-0" style="border:0" ng-repeat="s in vm.upcoming track by s.sessionID">
+            <div class="d-flex justify-content-between">
+              <div class="fw-semibold">{{(s.course && s.course.name) || ('Course #' + s.courseID)}}</div>
+              <div class="text-secondary small">{{s._dt | date:'MMM d, y, HH:mm'}}</div>
+            </div>
+            <div class="text-secondary small">
+              <span class="badge" ng-class="{'text-bg-success': s.isPaidFor, 'text-bg-secondary': !s.isPaidFor}">
+                {{s.isPaidFor ? 'Paid' : 'Unpaid'}}
+              </span>
+              <span class="ms-2">Confirmation: {{s.confirmationStatusLabel}}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

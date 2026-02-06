@@ -1,0 +1,69 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">My sessions</h2>
+    <div class="text-secondary">Your scheduled tutoring sessions</div>
+  </div>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="row g-2 align-items-end">
+      <div class="col-6 col-md-3">
+        <label class="form-label">From</label>
+        <input class="form-control" type="date" ng-model="vm.filter.from" />
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label">To</label>
+        <input class="form-control" type="date" ng-model="vm.filter.to" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div ng-if="vm.state.busy" class="d-flex align-items-center gap-2">
+      <div class="spinner-border" role="status"></div>
+      <div class="text-secondary">Loading…</div>
+    </div>
+
+    <div class="table-responsive" ng-if="!vm.state.busy">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Date & time</th>
+            <th>Paid</th>
+            <th>Confirmation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="s in vm.filtered() track by s.sessionID">
+            <td>{{(s.course && s.course.name) || ('Course #' + s.courseID)}}</td>
+            <td class="text-secondary">{{s.sessionDateTime | date:'MMM d, y, HH:mm'}}</td>
+            <td>
+              <span class="badge" ng-class="{'text-bg-success': s.isPaidFor, 'text-bg-secondary': !s.isPaidFor}">
+                {{s.isPaidFor ? 'Paid' : 'Unpaid'}}
+              </span>
+            </td>
+            <td class="text-secondary">
+              <span ng-if="s.confirmationStatus !== 0">{{vm.getStatusLabel(s.confirmationStatus)}}</span>
+              <div class="mt-1" ng-if="s.confirmationStatus === 0">
+                <button class="btn btn-sm btn-success me-1" ng-click="vm.confirm(s)">Confirm</button>
+                <button class="btn btn-sm btn-danger" ng-click="vm.reject(s)">Reject</button>
+              </div>
+            </td>
+          </tr>
+          <tr ng-if="!vm.sessions.length">
+            <td colspan="5" class="text-secondary">No sessions.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

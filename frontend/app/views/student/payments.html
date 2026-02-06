@@ -1,0 +1,56 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">My Payments</h2>
+    <div class="text-secondary">History of payments</div>
+  </div>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="row g-2 align-items-center mb-2">
+      <div class="col-12 col-md-4">
+        <input class="form-control" ng-model="vm.search" placeholder="Search..." />
+      </div>
+      <div class="col-12 col-md-8 text-secondary small text-end">
+        Sorted by date (newest first).
+      </div>
+    </div>
+
+    <div ng-if="vm.state.busy" class="d-flex align-items-center gap-2 py-3">
+      <div class="spinner-border" role="status"></div>
+      <div class="text-secondary">Loading payments...</div>
+    </div>
+
+    <div class="table-responsive" ng-if="!vm.state.busy">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Tutor</th>
+            <th>Amount</th>
+            <th>Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="p in vm.payments | filter:vm.search track by p.paymentRecordID">
+            <td>{{p.paidOn | date:'mediumDate'}} <span class="text-muted small">{{p.paidOn | date:'shortTime'}}</span></td>
+            <td>{{p.tutorUsername}}</td>
+            <td>{{p.amountPaid | currency:"zł "}}</td>
+            <td>
+              <span class="badge text-bg-light border text-dark">
+                {{vm.getMeansLabel(p.meansOfPayment)}}
+              </span>
+            </td>
+          </tr>
+          <tr ng-if="!vm.payments.length">
+            <td colspan="4" class="text-center text-secondary py-3">No payment history found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

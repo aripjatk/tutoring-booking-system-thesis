@@ -1,0 +1,74 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">Messages</h2>
+    <div class="text-secondary">Communicate with your tutors and students</div>
+  </div>
+  <button class="btn btn-primary" ng-click="vm.compose()">
+    <i class="bi bi-pencil-square me-1"></i>New Message
+  </button>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link" href="" ng-class="{active: vm.activeTab === 'inbox'}" ng-click="vm.setTab('inbox')">
+          <i class="bi bi-inbox me-2"></i>Inbox
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="" ng-class="{active: vm.activeTab === 'sent'}" ng-click="vm.setTab('sent')">
+          <i class="bi bi-send me-2"></i>Sent
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+    <div class="row g-2 align-items-center mb-2">
+      <div class="col-12 col-md-4">
+        <input class="form-control" ng-model="vm.search" placeholder="Search messages…" />
+      </div>
+    </div>
+
+    <div ng-if="vm.state.busy" class="d-flex align-items-center gap-2 my-4">
+      <div class="spinner-border" role="status"></div>
+      <div class="text-secondary">Loading messages…</div>
+    </div>
+
+    <div class="table-responsive" ng-if="!vm.state.busy">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th style="width: 25%;">{{vm.activeTab === 'inbox' ? 'From' : 'To'}}</th>
+            <th style="width: 50%;">Topic</th>
+            <th style="width: 25%;">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="m in vm.messages | filter:vm.search track by m.messageID" ng-click="vm.viewMessage(m.messageID)" style="cursor: pointer;">
+            <td>
+              <span class="fw-semibold">{{vm.activeTab === 'inbox' ? m.senderUsername : m.recipientUsername}}</span>
+            </td>
+            <td>
+              <span>{{m.topic}}</span>
+              <i ng-if="m.attachmentFileName" class="bi bi-paperclip text-secondary ms-1" title="Attachment"></i>
+            </td>
+            <td class="text-secondary small">
+              {{m.sentOn | date:'medium'}}
+            </td>
+          </tr>
+          <tr ng-if="!vm.messages.length">
+            <td colspan="3" class="text-secondary text-center py-4">
+              <i class="bi bi-inbox fs-4 d-block mb-2"></i>
+              No messages found.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

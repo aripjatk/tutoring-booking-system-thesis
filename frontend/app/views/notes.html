@@ -1,0 +1,71 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="h4 mb-1">Notes</h2>
+    <div class="text-secondary">Manage your personal notes</div>
+  </div>
+  <div>
+    <button class="btn btn-primary btn-sm me-2" ng-click="vm.initNewNote()" ng-if="!vm.isFormVisible">
+      <i class="bi bi-plus-lg me-1"></i>Add Note
+    </button>
+    <button class="btn btn-outline-secondary btn-sm" ng-click="vm.refresh()" ng-disabled="vm.state.busy">
+      <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+    </button>
+  </div>
+</div>
+
+<div class="alert alert-danger" ng-if="vm.state.error">
+  <i class="bi bi-exclamation-triangle me-2"></i>{{vm.state.error}}
+</div>
+
+<div ng-if="vm.state.busy" class="d-flex align-items-center gap-2 mb-3">
+  <div class="spinner-border spinner-border-sm" role="status"></div>
+  <div class="text-secondary">Loading…</div>
+</div>
+
+<!-- Form -->
+<div class="card mb-4" ng-if="vm.isFormVisible">
+  <div class="card-header fw-semibold">
+    {{vm.isEditing ? 'Edit Note' : 'New Note'}}
+  </div>
+  <div class="card-body">
+    <form ng-submit="vm.saveNote()">
+      <div class="mb-3">
+        <label for="noteBody" class="form-label">Note Content</label>
+        <textarea class="form-control" id="noteBody" rows="4" ng-model="vm.currentNote.body" required></textarea>
+      </div>
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-outline-secondary" ng-click="vm.cancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" ng-disabled="vm.state.busy">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- List -->
+<div class="row g-3" ng-if="!vm.state.busy && vm.notes.length === 0 && !vm.isFormVisible">
+  <div class="col-12 text-center text-secondary py-5">
+    <i class="bi bi-journal-x display-4 d-block mb-3"></i>
+    <p>No notes found. Create one above!</p>
+  </div>
+</div>
+
+<div class="row g-3" ng-if="vm.notes.length > 0">
+  <div class="col-12 col-md-6 col-lg-4" ng-repeat="note in vm.notes track by note.noteID">
+    <div class="card h-100">
+      <div class="card-body d-flex flex-column">
+        <div class="mb-2 text-secondary small d-flex justify-content-between">
+          <span>{{note.date | date:'medium'}}</span>
+        </div>
+        <p class="card-text flex-grow-1" style="white-space: pre-wrap;">{{note.body}}</p>
+        <div class="mt-3 d-flex justify-content-end gap-2">
+          <button class="btn btn-sm btn-outline-primary" ng-click="vm.editNote(note)">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" ng-click="vm.deleteNote(note.noteID)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
