@@ -77,6 +77,9 @@ namespace TutorApp.API.Controllers
             if (account == null || !account.IsTutor)
                 return Forbid();
 
+            if (paymentRecordDto.AmountPaid <= 0)
+                return BadRequest("Payment amount must be a positive number");
+
             var existingRecord = await _context.PaymentRecord.AsNoTracking().FirstOrDefaultAsync(p => p.PaymentRecordID == id);
 
             if (existingRecord == null)
@@ -121,7 +124,10 @@ namespace TutorApp.API.Controllers
                 return Forbid(ErrorMessages.NotATutor);
 
             if (paymentRecordDto.TutorUsername != username)
-                return BadRequest();
+                return BadRequest("Cannot create a payment record for another tutor");
+
+            if (paymentRecordDto.AmountPaid <= 0)
+                return BadRequest("Payment amount must be a positive number");
 
             var paymentRecord = new PaymentRecord
             {

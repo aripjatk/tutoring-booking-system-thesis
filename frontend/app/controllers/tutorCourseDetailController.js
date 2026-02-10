@@ -36,6 +36,9 @@
         ]).then(function (values) {
           vm.course = values[0];
           vm.enrollments = values[1] || [];
+          vm.enrollments.forEach(function (e) {
+            if (e.endDate) e.endDate = new Date(e.endDate);
+          });
           vm.accounts = values[2] || [];
           vm.students = vm.accounts.filter(a => a && a.isTutor === false);
 
@@ -52,6 +55,19 @@
         }).catch(function (err) {
           vm.state.error = (err && err.data) ? err.data : 'Failed to load course details.';
         }).finally(function () { vm.state.busy = false; });
+      };
+
+      vm.downloadMaterial = function (material) {
+        apiService.getTeachingMaterialFile(material.teachingMaterialID)
+          .then(function (response) {
+              var blob = response.data;
+              var link = document.createElement('a');
+              link.href = window.URL.createObjectURL(blob);
+              link.download = material.fileName;
+              link.click();
+              window.URL.revokeObjectURL(link.href);
+          })
+          .catch(function() { alert('Failed to download teaching material.'); });
       };
 
       vm.uploadMaterial = function () {

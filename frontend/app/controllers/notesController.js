@@ -20,6 +20,11 @@
             vm.notes = (data || []).sort(function(a, b) {
               return new Date(b.date) - new Date(a.date);
             });
+            vm.notes.forEach(function (n) {
+              if(n.date && !n.date.endsWith('Z')) {
+                n.date += 'Z';
+              }
+            });
           })
           .catch(function (err) {
             vm.state.error = 'Failed to load notes.';

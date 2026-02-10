@@ -103,16 +103,10 @@
           fd.append('Name', vm.newAssignment.name);
           fd.append('Objective', vm.newAssignment.objective || '');
 
-          var fileInput = document.getElementById('newAssignmentFile');
-          if (fileInput && fileInput.files.length > 0) {
-              fd.append('File', fileInput.files[0]);
-          }
-
           apiService.createHomeworkAssignment(fd)
             .then(function (hw) {
                 vm.state.success = 'Assignment created.';
                 vm.newAssignment = { name: '', objective: '', file: null };
-                if (fileInput) fileInput.value = '';
                 vm.load();
             })
             .catch(function (err) {

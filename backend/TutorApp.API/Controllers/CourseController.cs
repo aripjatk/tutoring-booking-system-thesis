@@ -84,7 +84,10 @@ namespace TutorApp.API.Controllers
             if (!existingCourse.TutorUsername.Equals(username))
                 return Forbid("Cannot edit a course belonging to another tutor");
             if (!existingCourse.TutorUsername.Equals(courseDto.TutorUsername))
-                return Forbid("Cannot change the tutor assigned to a given course");
+                return BadRequest("Cannot change the tutor assigned to a given course");
+
+            if (courseDto.PricePerSession <= 0)
+                return BadRequest("Price per session must be a positive number");
 
             existingCourse.Name = courseDto.Name;
             existingCourse.PricePerSession = courseDto.PricePerSession;
@@ -122,7 +125,11 @@ namespace TutorApp.API.Controllers
                 return BadRequest();
 
             if (!createDto.TutorUsername.Equals(username))
-                return Forbid("Creating a course for another tutor is not allowed");
+                return BadRequest("Creating a course for another tutor is not allowed");
+
+            if (createDto.PricePerSession <= 0)
+                return BadRequest("Price per session must be a positive number");
+
             var course = new Course() {
                 TutorUsername = createDto.TutorUsername,
                 Name = createDto.Name,

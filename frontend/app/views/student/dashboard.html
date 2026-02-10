@@ -47,7 +47,7 @@
         <div class="list-group list-group-flush">
           <div class="list-group-item bg-transparent px-0" style="border:0" ng-repeat="s in vm.upcoming track by s.sessionID">
             <div class="d-flex justify-content-between">
-              <div class="fw-semibold">{{(s.course && s.course.name) || ('Course #' + s.courseID)}}</div>
+              <div class="fw-semibold">{{(s.course && s.course.name) || ('Unknown course')}}</div>
               <div class="text-secondary small">{{s._dt | date:'MMM d, y, HH:mm'}}</div>
             </div>
             <div class="text-secondary small">

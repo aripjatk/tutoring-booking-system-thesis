@@ -36,7 +36,7 @@
             <td>
               <div class="fw-semibold">
                 <a ng-href="#!/student/courses/{{sc.courseID}}" class="text-decoration-none">
-                   {{(sc.course.name) || ('Course #' + sc.courseID)}}
+                   {{(sc.course.name) || ('Unknown course')}}
                 </a>
               </div>
               <div class="text-secondary small">{{(sc.course && sc.course.description) || ''}}</div>

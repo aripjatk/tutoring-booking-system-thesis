@@ -47,7 +47,6 @@
           <div class="list-group-item d-flex align-items-center justify-content-between" ng-repeat="tm in vm.teachingMaterials">
              <div>
                <div class="fw-semibold">{{tm.name}}</div>
-               <div class="text-secondary small"><i class="bi bi-file-earmark me-1"></i>{{tm.fileName}}</div>
              </div>
              <button class="btn btn-sm btn-outline-primary" ng-click="vm.downloadMaterial(tm)">
                <i class="bi bi-download me-1"></i>Download

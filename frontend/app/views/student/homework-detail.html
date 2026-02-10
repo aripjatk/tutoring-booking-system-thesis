@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center justify-content-between mb-3">
   <div>
-    <h2 class="h4 mb-1">Assignment #{{vm.id}}</h2>
+    <h2 class="h4 mb-1">Assignment</h2>
     <div class="text-secondary">Details & Submission</div>
   </div>
   <button class="btn btn-outline-secondary" ng-click="vm.back()">
@@ -23,7 +23,6 @@
 <div class="card" ng-if="!vm.state.busy && vm.assignment">
   <div class="card-body">
     <h5 class="card-title">{{vm.assignment.name}}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">Session #{{vm.assignment.sessionID}}</h6>
 
     <div class="mb-4">
       <div class="fw-bold mb-1">Objective:</div>
@@ -35,15 +34,15 @@
     <div class="mb-4">
       <h6 class="fw-bold">Your Solution</h6>
       <div ng-if="vm.assignment.solutionFileName" class="mb-2">
-        <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Submitted:
-            <a href="" ng-click="vm.downloadFile()" class="text-decoration-none">{{vm.assignment.solutionFileName}}</a>
+        <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Submitted.
+            <a href="" ng-click="vm.downloadFile()" class="text-decoration-none">Click here to download your solution</a>
         </span>
       </div>
       <div ng-if="!vm.assignment.solutionFileName" class="mb-2 text-warning">
         <i class="bi bi-exclamation-circle me-1"></i>No solution submitted yet.
       </div>
 
-      <div class="input-group mb-3">
+      <div class="input-group mb-3" ng-if="!vm.assignment.solutionFileName">
         <input type="file" class="form-control" id="solutionFile">
         <button class="btn btn-primary" type="button" ng-click="vm.upload()">Upload Solution</button>
       </div>

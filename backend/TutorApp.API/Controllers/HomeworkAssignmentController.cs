@@ -44,7 +44,7 @@ namespace TutorApp.API.Controllers {
                 SessionID = h.SessionID,
                 Name = h.Name,
                 Objective = h.Objective,
-                HasSolutionFile = h.SolutionFileName != null,
+                SolutionFileName = h.SolutionFileName,
                 SolutionFeedback = h.SolutionFeedback
             }));
         }
@@ -82,7 +82,7 @@ namespace TutorApp.API.Controllers {
                 SessionID = homeworkAssignment.SessionID,
                 Name = homeworkAssignment.Name,
                 Objective = homeworkAssignment.Objective,
-                HasSolutionFile = homeworkAssignment.SolutionFileName != null,
+                SolutionFileName = homeworkAssignment.SolutionFileName,
                 SolutionFeedback = homeworkAssignment.SolutionFeedback
             };
         }
@@ -250,11 +250,19 @@ namespace TutorApp.API.Controllers {
                 return NotFound();
 
             if (account.IsTutor)
+            {
                 if (homeworkAssignment.Session.Course.TutorUsername != username)
-                    return Forbid("Attempted to download homework assigned by a different tutor");
+                {
+                    return BadRequest("Attempted to download homework assigned by a different tutor");
+                }
+            }
             else
+            {
                 if (homeworkAssignment.Session.StudentUsername != username)
-                    return Forbid("Attempted to download homework assigned to a different student");
+                {
+                    return BadRequest("Attempted to download homework assigned to a different student");
+                }
+            }
 
             var filePath = _fileService.GetFilePath(homeworkAssignment.SolutionFileName);
             if (!System.IO.File.Exists(filePath))

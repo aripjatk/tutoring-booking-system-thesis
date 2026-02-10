@@ -51,7 +51,7 @@
       };
 
       vm.delete = function (c) {
-        if (!confirm('Delete course "' + (c.name || c.courseID) + '"?')) return;
+        if (!confirm('Delete course "' + (c.name) + '"?')) return;
         apiService.deleteCourse(c.courseID)
           .then(vm.load)
           .catch(function (err) {

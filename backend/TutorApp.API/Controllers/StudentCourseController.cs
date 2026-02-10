@@ -94,7 +94,7 @@ namespace TutorApp.API.Controllers
         }
 
         [HttpPut("{courseId}/{studentUsername}")]
-        public async Task<IActionResult> PutStudentCourse(string studentUsername, int courseId, Student_Course studentCourse)
+        public async Task<IActionResult> PutStudentCourse(string studentUsername, int courseId, StudentCourseDto dto)
         {
             var username = GetCurrentUsername();
             var account = await _context.Account.FindAsync(username);
@@ -103,18 +103,30 @@ namespace TutorApp.API.Controllers
             if (!account.IsTutor)
                 return Forbid(ErrorMessages.NotATutor);
 
-            if (!studentUsername.Equals(studentCourse.StudentUsername))
-                return BadRequest("Cannot change a student course assignment to point to a different student."
+            var existingStudentCourse = await _context.StudentCourse.FindAsync(studentUsername, courseId);
+            var existingCourse = await _context.Course.FindAsync(courseId);
+            if (existingStudentCourse == null)
+                return NotFound("No such enrollment");
+            if (existingCourse == null)
+                return StatusCode(500, "Cannot find the course connected to this enrollment (DB corrupted?)");
+            if (!existingCourse.TutorUsername.Equals(username))
+                return Forbid("Cannot change enrollments for other tutors' courses");
+
+            if (!studentUsername.Equals(dto.StudentUsername))
+                return BadRequest("Cannot change a student course enrollment to point to a different student."
                     + " Please unassign the student from this course, and then assign the desired student to it.");
 
-            if (courseId != studentCourse.CourseID)
-                return BadRequest("Cannot change a student course assignment to point to a different course."
+            if (courseId != dto.CourseID)
+                return BadRequest("Cannot change a student course enrollment to point to a different course."
                     + " Please unassign the student from this course, and then assign the student to the desired course.");
 
-            if (studentCourse.EndDate.CompareTo(DateTime.Now) < 0)
-                return BadRequest("The new assignment end date cannot be in the past.");
+            if (dto.EndDate.CompareTo(DateTime.Now) < 0)
+                return BadRequest("The new enrollment end date cannot be in the past.");
 
-            _context.Entry(studentCourse).State = EntityState.Modified;
+            existingStudentCourse.Frequency = dto.Frequency;
+            existingStudentCourse.EndDate = dto.EndDate;
+
+            _context.Entry(existingStudentCourse).State = EntityState.Modified;
 
             try
             {
@@ -154,10 +166,10 @@ namespace TutorApp.API.Controllers
                 return BadRequest("No such course");
 
             if (!username.Equals(course.TutorUsername))
-                return Forbid("Cannot assign students to other tutors' courses");
+                return BadRequest("Cannot assign students to other tutors' courses");
 
             if (studentCourseDto.EndDate.CompareTo(DateTime.Now) < 0)
-                return BadRequest("The assignment end date cannot be in the past.");
+                return BadRequest("The enrollment end date cannot be in the past");
 
             var studentCourse = new Student_Course
             {
@@ -176,7 +188,7 @@ namespace TutorApp.API.Controllers
             catch (DbUpdateException)
             {
                 if (await StudentCourseExistsAsync(studentCourse.StudentUsername, studentCourse.CourseID))
-                    return Conflict("This student is already assigned to this course.");
+                    return Conflict("This student is already enrolled in this course");
                 else
                     throw;
             }

@@ -13,7 +13,7 @@
       vm.state = { busy: true, error: '' };
       vm.notifications = [];
 
-      m.typeLabels = {
+      vm.typeLabels = {
         0: 'Session accepted',
         1: 'Session rejected',
         2: 'Homework solution uploaded',

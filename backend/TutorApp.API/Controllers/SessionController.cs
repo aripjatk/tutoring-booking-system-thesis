@@ -87,7 +87,7 @@ namespace TutorApp.API.Controllers
                     SessionID = x.SessionID,
                     Name = x.Name,
                     Objective = x.Objective,
-                    HasSolutionFile = x.SolutionFileName != null,
+                    SolutionFileName = x.SolutionFileName,
                     SolutionFeedback = x.SolutionFeedback
                 });
 
@@ -229,12 +229,15 @@ namespace TutorApp.API.Controllers
 
             var course = await _context.Course.FindAsync(sessionDto.CourseID);
             if (course == null)
-                return BadRequest("Invalid CourseID");
+                return BadRequest("No such course");
             if (!course.TutorUsername.Equals(username))
                 return Forbid("Cannot add a session to a course not owned by the current user");
 
-            var session = new Session
-            {
+            var enrollment = await _context.StudentCourse.FindAsync(sessionDto.StudentUsername, sessionDto.CourseID);
+            if (enrollment == null)
+                return BadRequest("This student is not enrolled in the given course");
+
+            var session = new Session {
                 StudentUsername = sessionDto.StudentUsername,
                 CourseID = sessionDto.CourseID,
                 SessionDateTime = sessionDto.SessionDateTime,
@@ -244,8 +247,7 @@ namespace TutorApp.API.Controllers
 
             _context.Session.Add(session);
 
-            var notification = new Notification
-            {
+            var notification = new Notification {
                 AccountUsername = session.StudentUsername,
                 NotificationType = NotificationType.SessionCreated,
                 Message = $"Tutor {username} created a new session for course {course.Name}.",
@@ -255,8 +257,7 @@ namespace TutorApp.API.Controllers
 
             await _context.SaveChangesAsync();
 
-            var resultDto = new SessionDto
-            {
+            var resultDto = new SessionDto {
                 SessionID = session.SessionID,
                 StudentUsername = session.StudentUsername,
                 CourseID = session.CourseID,

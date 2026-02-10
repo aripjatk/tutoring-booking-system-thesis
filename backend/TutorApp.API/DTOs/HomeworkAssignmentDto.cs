@@ -6,7 +6,7 @@ namespace TutorApp.API.DTOs
         public int SessionID { get; set; }
         public string Name { get; set; }
         public string Objective { get; set; }
-        public bool HasSolutionFile { get; set; }
+        public string? SolutionFileName { get; set; }
         public string? SolutionFeedback { get; set; }
     }
 }

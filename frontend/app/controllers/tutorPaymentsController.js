@@ -47,7 +47,15 @@
 
             vm.payments = payments.filter(function(p) {
                return p.tutorUsername === vm.user.username;
-            }).sort(function (a, b) {
+            });
+
+            vm.payments.forEach(function (p) {
+              if (p.paidOn && !p.paidOn.endsWith('Z')) {
+                p.paidOn += 'Z';
+              }
+            });
+
+            vm.payments.sort(function (a, b) {
               return new Date(b.paidOn) - new Date(a.paidOn);
             });
           })

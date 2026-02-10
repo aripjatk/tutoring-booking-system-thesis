@@ -30,6 +30,10 @@ body.theme-dark .navbar {
   --bs-navbar-brand-color: var(--tbs-text);
   --bs-navbar-brand-hover-color: var(--tbs-text);
 }
+body.theme-dark .table {
+  --bs-table-color: var(--tbs-text);
+  color: var(--tbs-text);
+}
 body { background: var(--tbs-bg); color: var(--tbs-text); }
 .bg-body { background: var(--tbs-bg) !important; }
 .card { background: var(--tbs-card); border-color: var(--tbs-border); }

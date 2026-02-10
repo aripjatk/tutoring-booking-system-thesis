@@ -37,9 +37,9 @@
         </thead>
         <tbody>
           <tr ng-repeat="p in vm.payments | filter:vm.search track by p.paymentRecordID">
-            <td>{{p.paidOn | date:'mediumDate'}} <span class="text-muted small">{{p.paidOn | date:'shortTime'}}</span></td>
+            <td>{{p.paidOn | date:'mediumDate'}} <span class="text-muted small">{{p.paidOn | date:'HH:mm'}}</span></td>
             <td>{{p.tutorUsername}}</td>
-            <td>{{p.amountPaid | currency:"zł "}}</td>
+            <td>{{p.amountPaid | number:2}} zł</td>
             <td>
               <span class="badge text-bg-light border text-dark">
                 {{vm.getMeansLabel(p.meansOfPayment)}}

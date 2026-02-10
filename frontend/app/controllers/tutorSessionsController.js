@@ -98,7 +98,7 @@
       };
 
       vm.delete = function (s) {
-        if (!confirm('Delete session #' + s.sessionID + '?')) return;
+        if (!confirm('Delete this session?')) return;
         apiService.deleteSession(s.sessionID)
           .then(vm.load)
           .catch(function (err) { vm.state.error = err && err.data ? err.data : 'Failed to delete session.'; });
